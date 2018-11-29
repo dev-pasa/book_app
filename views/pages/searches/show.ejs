@@ -36,9 +36,11 @@
       <h4>Search Results</h4>
       <ul class="search-results">
         <% searchResults.forEach(book => { %>
-          <li data-book-id="<%= book.isbn %>">
+          <li>
+
+          <!-- </li> data-book-id="<%= book.isbn %>"> -->
             <div class="book-container">
-              <img src=<%= book.image_url %>>
+              <!-- <img src=<%= book.picture %>> -->
               <section>
                 <h3><%= book.title %></h3>
                 <span><%= book.author %></span>

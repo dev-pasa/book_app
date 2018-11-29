@@ -29,12 +29,20 @@ app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 
 // HELPER FUNCTIONS
 // Only show part of this to get students started
+// function Book(info) {
+//   // const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
+
+//   this.title = info.title || 'No title available';
+
+// }
+
 function Book(info) {
-  const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
-
-  this.title = info.title || 'No title available';
-
-}
+  // this.picture = info.imageLinks.thumbNail;
+  this.title = info.title;
+  this.author = info.authors;
+  this.description = info.description;
+ 
+ }
 
 // Note that .ejs file extension is not required
 function newSearch(request, response) {
