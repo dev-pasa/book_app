@@ -37,8 +37,8 @@ app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 // }
 
 function Book(info) {
-  // this.picture = info.imageLinks.thumbNail;
   this.title = info.title;
+  this.picture = info.imageLinks.thumbnail;
   this.author = info.authors;
   this.description = info.description;
  
