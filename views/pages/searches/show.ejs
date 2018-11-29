@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Collection</title>
     <link rel="stylesheet" href="/public/styles/base.css">
-    <!-- <link rel="stylesheet" href="/public/styles/reset.css">
+    <!-- <link rel="stylesheet" href="/styles/reset.css">
     <link rel="stylesheet" href="/styles/icons.css">
-    <link rel="stylesheet" href="/public/styles/base.css">
-    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/layout.css"> -->
+    
     <!-- <link rel="stylesheet" href="/styles/modules/error.css">
     <link rel="stylesheet" href="/styles/modules/partials/header.css">
     <link rel="stylesheet" href="/styles/modules/partials/footer.css">
@@ -36,9 +37,11 @@
       <h4>Search Results</h4>
       <ul class="search-results">
         <% searchResults.forEach(book => { %>
-          <li data-book-id="<%= book.isbn %>">
+          <li>
+
+          <!-- </li> data-book-id="<%= book.isbn %>"> -->
             <div class="book-container">
-              <img src=<%= book.image_url %>>
+              <!-- <img src=<%= book.picture %>> -->
               <section>
                 <h3><%= book.title %></h3>
                 <span><%= book.author %></span>
@@ -59,4 +62,5 @@
     </footer>
 
   </body>
+
 </html>
