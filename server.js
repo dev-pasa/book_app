@@ -1,48 +1,59 @@
 'use strict';
 
+// Application Dependencies
 const express = require('express');
-const app = express();
-const PORT = process.env.PORT;
+const superagent = require('superagent');
 
-// Set the view engine for templating
+// Application Setup
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// Application Middleware
+app.use(express.urlencoded({extended:true}));
+app.use(express.static('public'));
+
+// Set the view engine for server-side templating
 app.set('view engine', 'ejs');
 
-// Array of groceries for /list route
-let list = ['apples', 'celery', 'butter', 'milk', 'eggs'];
+// API Routes
+// Renders the search form
+app.get('/', newSearch);
 
-// Array of quantities for /quantities route
-let quantities = [
-  {name: 'apples', quantity: 4},
-  {name: 'celery', quantity: 1},
-  {name: 'butter', quantity: 3},
-  {name: 'milk', quantity: 2},
-  {name: 'eggs', quantity: 12}
-]
+// Creates a new search to the Google Books API
+app.post('/searches', createSearch);
 
-// ROUTES
+// Catch-all
+app.get('*', (request, response) => response.status(404).send('This route does not exist'));
 
-// Route to show that we can send HTML strings from server
-// app.get('/wut', (request, response) => {
-//   console.log('in the "wut" route');
-//   response.send('<h1>TA team FTW</h1><ol><li>David</li><li>Madi</li><li>Hanner</li></ol><img src="http://demi.dog/2.jpg" />');
-// })
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 
-// Route for home view
-app.get('/', (request, response) => {
-  response.render('index');
-})
+// HELPER FUNCTIONS
+// Only show part of this to get students started
+function Book(info) {
+  const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
 
-// Route for list view
-app.get('/list', (request, response) => {
-  response.render('list', {arrayOfItems: list});
-})
+  this.title = info.title || 'No title available';
 
-// Route for quantities view
-app.get('/quantities', (request, response) => {
-  response.render('quantities', {groceryObjects: quantities})
-})
+}
 
-// Catch-all route for anything that is not handled
-// app.get();
+// Note that .ejs file extension is not required
+function newSearch(request, response) {
+  response.render('pages/index');
+}
 
-app.listen(PORT, () => console.log(`Listening on Port ${PORT}`));
+// No API key required
+// Console.log request.body and request.body.search
+function createSearch(request, response) {
+  let url = 'https://www.googleapis.com/books/v1/volumes?q=';
+
+  console.log(request.body)
+  console.log(request.body.search)
+
+  if (request.body.search[1] === 'title') { url += `+intitle:${request.body.search[0]}`; }
+  if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`; }
+
+  superagent.get(url)
+    .then(apiResponse => apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo)))
+    .then(results => response.render('pages/searches/show', {searchResults: results}))
+    // how will we handle errors?
+}
