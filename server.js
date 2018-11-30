@@ -41,7 +41,6 @@ function Book(info) {
   this.picture = info.imageLinks.thumbnail;
   this.author = info.authors;
   this.description = info.description;
- 
  }
 
 // Note that .ejs file extension is not required
