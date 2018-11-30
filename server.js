@@ -41,6 +41,8 @@ function Book(info) {
   this.picture = info.imageLinks.thumbnail;
   this.author = info.authors;
   this.description = info.description;
+  this.bookshelf = info.categories;
+  this.isbn = info.industryIdentifiers ? info.industryIdentifiers[0]:'N/A';
  
  }
 
