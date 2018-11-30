@@ -42,7 +42,13 @@ function Book(info) {
   this.author = info.authors;
   this.description = info.description;
 
-}
+  this.bookshelf = info.categories;
+  this.isbn = info.industryIdentifiers ? info.industryIdentifiers[0]:'N/A';
+ 
+ }
+
+
+
 
 // Note that .ejs file extension is not required
 function newSearch(request, response) {
