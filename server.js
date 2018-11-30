@@ -41,10 +41,14 @@ function Book(info) {
   this.picture = info.imageLinks.thumbnail;
   this.author = info.authors;
   this.description = info.description;
+
   this.bookshelf = info.categories;
   this.isbn = info.industryIdentifiers ? info.industryIdentifiers[0]:'N/A';
  
  }
+
+
+
 
 // Note that .ejs file extension is not required
 function newSearch(request, response) {
@@ -66,4 +70,9 @@ function createSearch(request, response) {
     .then(apiResponse => apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo)))
     .then(results => response.render('pages/searches/show', {searchResults: results}))
     // how will we handle errors?
+    .catch(err => handleError(err, response));
+}
+
+function handleError(error, response) {
+  response.render('pages/error', {error: error});
 }
