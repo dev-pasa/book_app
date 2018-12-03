@@ -1,4 +1,4 @@
-DROP TABLE books, movies;
+DROP TABLE books;
 
   CREATE TABLE IF NOT EXISTS books ( 
     id SERIAL PRIMARY KEY,
@@ -11,7 +11,7 @@ DROP TABLE books, movies;
   );
 
 
-INSERT INTO tasks (title, author, isbn, image_url, description, bookshelf) 
+INSERT INTO books(title, author, isbn, image_url, description, bookshelf) 
 VALUES(
     'Dune', 'Frank Herbert', 'ISBN_13 9780441013593',
     'http://books.google.com/books/content?id=B1hSG45JCX4C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api' ,'Follows the adventures of Paul Atreides, the son of a betrayed duke given up for dead on a treacherous desert planet and adopted by its fierce, nomadic people, who help him unravel his most unexpected destiny.' , 'documentary'
