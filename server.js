@@ -1,66 +1,127 @@
 'use strict';
 
-// Application Dependencies
+// dependencies
 const express = require('express');
 const superagent = require('superagent');
+const pg = require('pg');
 
-// Application Setup
+require ('dotenv').config();
+
+// setup
+const PORT = process.env.PORT;
 const app = express();
-const PORT = process.env.PORT || 4000;
 
-// Application Middleware
+// application middleware
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
 
-// Set the view engine for server-side templating
-app.set('view engine', 'ejs');
+// set view
+app.set('view engine', 'ejs')
 
-// API Routes
-// Renders the search form
-app.get('/', newSearch);
+//database setup
+const client = new pg.Client(process.env.DATABASE_URL);
+client.connect();
+client.on('error', err => console.error(err));
 
-// Creates a new search to the Google Books API
-app.post('/searches', createSearch);
 
-// Catch-all
-app.get('*', (request, response) => response.status(404).send('This route does not exist'));
-
-app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
-
-// HELPER FUNCTIONS
-// Only show part of this to get students started
-// function Book(info) {
-//   // const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
-
-//   this.title = info.title || 'No title available';
-
-// }
-
-function Book(info) {
-  this.title = info.title;
-  this.picture = info.imageLinks.thumbnail;
-  this.author = info.authors;
-  this.description = info.description;
- }
-
-// Note that .ejs file extension is not required
-function newSearch(request, response) {
-  response.render('pages/index');
+function handleError(err, res) {
+  console.error(err);
+  res.render('pages/error', {error: err});
 }
 
-// No API key required
-// Console.log request.body and request.body.search
-function createSearch(request, response) {
+//api routes
+app.get('/', homePage);
+app.get('/book/:bookInfo', getDetail);
+app.get('/books/show', getOneBook);
+app.get('/new_search', newSearch);
+app.get('/books/:add', dbInsert);
+
+app.post('/books', addBook);
+app.post('/searches', createSearch);
+app.post('/add', addBook);
+
+
+//catchall
+app.get('*', (request, response) => response.status(404).send('You have an error'));
+
+// listener
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+//Helper 
+function newSearch (req, res) {
+  res.render('pages/searches/new');
+}
+
+
+function dbInsert (req, res) {
+  res.render('books/show');
+}
+
+function homePage (req, res) {
+  let SQL = 'SELECT * FROM books;';
+
+  return client.query(SQL)
+    .then(results => {
+      res.render('pages/index', {results: results.rows})
+    })
+    .catch(handleError);
+}
+
+function getDetail (req, res) {
+  let SQL = 'SELECT * FROM books WHERE id=$1;';
+  let values = [req.params.bookInfo];
+
+  return client.query(SQL, values)
+    .then( (result) => {
+      return res.render('books/detail', {book: result.rows[0]})
+    })
+    .catch(handleError);
+}
+
+function getOneBook (req, res) {
+  let SQL = 'SELECT * FROM books WHERE id=$1;';
+  let values = [req.params.bookInfo];
+
+  return client.query(SQL, values)
+    .then( (result) => {
+      return res.render('books/show', {book: result.rows[0]})
+    })
+    .catch(handleError);
+}
+
+function addBook (req, res) {
+  let SQL = 'INSERT INTO books (title, author, isbn, image_url, description) VALUES ($1, $2, $3, $4, $5);';
+  // console.log('reqbody', req.body);
+  let values = [
+    req.body.title,
+    req.body.author,
+    req.body.isbn,
+    req.body.image_url,
+    req.body.description
+  ];
+  // console.log('values', values);
+  client.query(SQL, values)
+    .then(res.redirect('/'))
+    .catch(res.redirect('/error'));
+ 
+}
+
+//model
+function Book(info) {
+  this.title = info.title ? info.title : 'No Data Found' ;
+  this.author = info.authors ? info.authors[0] : 'No Data Found' ;
+  this.description = info.description ? info.description :  'No Data Found';
+  this.image_url = info.imageLinks.thumbnail ? info.imageLinks.thumbnail : 'http://www.lse.ac.uk/International-History/Images/Books/NoBookCover.png' ;
+  this.isbn = info.industryIdentifiers[0].identifier ? info.industryIdentifiers[0].identifier :  'No Data Found';
+}
+
+function createSearch (req, res) {
   let url = 'https://www.googleapis.com/books/v1/volumes?q=';
-
-  console.log(request.body)
-  console.log(request.body.search)
-
-  if (request.body.search[1] === 'title') { url += `+intitle:${request.body.search[0]}`; }
-  if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`; }
+  if (req.body.search[1] === 'title') { url += `+intitle:${req.body.search[0]}`; }
+  if (req.body.search[1] === 'author') { url += `+inauthor:${req.body.search[0]}`; }
 
   superagent.get(url)
     .then(apiResponse => apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo)))
-    .then(results => response.render('pages/searches/show', {searchResults: results}))
-    // how will we handle errors?
+    .then(results => res.render('pages/searches/show', {searches: results}))
+    .catch(error => handleError(error, res));
 }
