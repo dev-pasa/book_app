@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('../layout/head') %>
+</head>
+<body>
+  <header>
+    <%- include('../layout/header') %>
+  </header>
+  <main>
+    <h2>Book Details</h2>
+
+<div>
+  
+   <img src = "<%= book.image_url %>"/>
+    <h3><%= book.title %></h3>
+    <h3><%= book.author %></h3>
+     <p><%= book.description %></p>
+</div>
+
+<form>
+ <button type= 'submit'>Update Details</button>
+ </form>
+  <form action="/delete" method="post">
+ <button type= 'submit'>Delete Book</button>
+</form>
+</li>
+
+</main>
+</body>
+</html>

@@ -1,15 +1,38 @@
-Google Book App meant to return specific book when query is entereted by client.
-
+Google Book App
 Colloborated by Daniel Ulie & Dev Shrestha
-Also with collaboration from Sam Hamm's class demo
 
-Number and name of feature: Server side rendering
 
+## Changes
+Number and name of feature: lab 11 set up
+Estimate of time needed to complete: 2 hour
+Start time: 9:30
+Finish time: 11:30
+Actual time needed to complete: 2 hour
+
+Number and name of feature: lab 11 Feature 1: Server-side rendering
+Estimate of time needed to complete: 1 hour
+Start time: 10:30
+Finish time: 11:30
+Actual time needed to complete: 1 hour
+
+
+Number and name of feature: lab 11 Feature 2: Search the Google Books API
+Estimate of time needed to complete: 1 hour
+Start time: 11:00
+Finish time: 12:30
+Actual time needed to complete:  1.5 hours
+
+
+Number and name of feature: lab 11 Feature 3: Display search results
 Estimate of time needed to complete: 1.5 hours
+Start time: 12:30
+Finish time: 2:00
+Actual time needed to complete: 1.5 hours
 
-Start time: 10 am
 
+Number and name of feature: lab 11 Feature 4: Error handling
+Estimate of time needed to complete: 1 hour 
+Start time: 9:00
+Finish time: 10:00
+Actual time needed to complete: 1 hour
 
-Finish time: 12 pm
-
-Actual time needed to complete: 2 hours.
