@@ -1,5 +1,15 @@
+body {
+  color: rgb(238, 235, 235);
+  height: 100%;
+}
 
-main{
-  background: rgb(207, 151, 151);
+html {
+  height: 100%;
+}
 
+main {
+  height: 100%;
+  padding-top: 75px;
+  overflow: scroll;
+  
 }
